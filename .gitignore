@@ -1,0 +1,16 @@
+/.godot
+/.import
+/.mono
+/.obsidian
+/backups
+/builds
+/data_*
+.backup_*.*
+*.md
+!README.md
+export_presets.cfg
+export.cfg
+export_credentials.cfg
+*.translation
+
+*.tmp
