@@ -1,0 +1,13 @@
+[gd_resource type="Theme" format=3 uid="uid://bart274soe5d1"]
+
+[ext_resource type="StyleBox" uid="uid://bkedto34x5g6r" path="res://resources/ui/themes/button_hover.tres" id="1_0pu1e"]
+[ext_resource type="StyleBox" uid="uid://bewfqpca50063" path="res://resources/ui/themes/button_normal.tres" id="1_um1ba"]
+[ext_resource type="StyleBox" uid="uid://xr3volmrejul" path="res://resources/ui/themes/button_pressed.tres" id="2_0pu1e"]
+[ext_resource type="FontFile" uid="uid://cfn4h3h2hfydm" path="res://resources/fonts/Aleho Scribble.otf" id="3_6fxtb"]
+
+[resource]
+default_font = ExtResource("3_6fxtb")
+default_font_size = 30
+Button/styles/hover = ExtResource("1_0pu1e")
+Button/styles/normal = ExtResource("1_um1ba")
+Button/styles/pressed = ExtResource("2_0pu1e")

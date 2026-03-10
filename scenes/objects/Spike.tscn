@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://c7m3n8o1w8spk"]
+
+[ext_resource type="Script" uid="uid://dy8dum4fa2ebu" path="res://scripts/objects/spike.gd" id="1_spike"]
+[ext_resource type="Texture2D" uid="uid://btnvyvpy7ffca" path="res://resources/Spikes/Individual Spike.png" id="2_hop5j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hop5j"]
+atlas = ExtResource("2_hop5j")
+region = Rect2(0, 0, 17, 9)
+
+[node name="Spike" type="StaticBody2D" unique_id=697216101]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("1_spike")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1009174983]
+position = Vector2(5.364418e-07, 8.1875)
+scale = Vector2(1.8823531, 1.736111)
+texture = SubResource("AtlasTexture_hop5j")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1084436537]
+position = Vector2(-0.39999962, 10)
+scale = Vector2(1.0147059, 1)
+polygon = PackedVector2Array(-17, 6, 0, -10, 17, 6)
+
+[node name="DeathZone" type="Area2D" parent="." unique_id=666247646]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="DeathZone" unique_id=1201039783]
+position = Vector2(0, 10)
+polygon = PackedVector2Array(-19, 6, 0, -12, 19, 6)

@@ -1,0 +1,6 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://bl1vbrgfaos3b"]
+
+[ext_resource type="FontFile" uid="uid://vmw4opio331" path="res://resources/fonts/Font_EFIGS_rabbids_go_home.ttf" id="1_rf3ea"]
+
+[resource]
+font = ExtResource("1_rf3ea")

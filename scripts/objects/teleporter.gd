@@ -1,0 +1,70 @@
+extends ActivatableObject
+## Телепортирует игрока в указанную точку при активации
+class_name Teleporter
+
+## Целевая позиция телепортации
+@export var target_position: Vector2 = Vector2.ZERO
+
+## Сохранять скорость при телепортации
+@export var preserve_velocity: bool = false
+
+## Эффект затемнения при телепортации
+@export var fade_effect: bool = true
+
+## Длительность затемнения
+@export var fade_duration: float = 0.2
+
+## Зона автотелепортации
+@export var auto_trigger_zone: Area2D
+
+## Работать только в указанном измерении
+@export var dimension_specific: bool = false
+
+## Измерение для работы (0 = DIM1, 1 = DIM2)
+@export var active_dimension: int = 0
+
+## Ссылка на уровень
+@export var level: BaseLevel
+
+## Игрок в зоне
+var _player_in_zone: Player = null
+
+func _ready() -> void:
+	super._ready()
+	if auto_trigger_zone:
+		auto_trigger_zone.body_entered.connect(_on_body_entered)
+		auto_trigger_zone.body_exited.connect(_on_body_exited)
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is Player:
+		_player_in_zone = body
+		if not dimension_specific or (level and level.current_dimension == active_dimension):
+			_teleport(body)
+
+func _on_body_exited(body: Node2D) -> void:
+	if body is Player:
+		_player_in_zone = null
+
+func _activate(_activator: BaseActivator) -> void:
+	var player := _get_player()
+	if player:
+		_teleport(player)
+
+func _teleport(player: Player) -> void:
+	if not is_instance_valid(player):
+		return
+	
+	var velocity := player.velocity
+	
+	if fade_effect:
+		await FadeManager.fade_out(fade_duration)
+	
+	player.global_position = target_position
+	player.velocity = velocity if preserve_velocity else Vector2.ZERO
+	
+	if fade_effect:
+		await FadeManager.fade_in(fade_duration)
+
+func _get_player() -> Player:
+	var players := get_tree().get_nodes_in_group("Player")
+	return players[0] as Player if players.size() > 0 else null

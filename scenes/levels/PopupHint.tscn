@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://c3c4l5kf7llw8"]
+
+[ext_resource type="Script" uid="uid://by8jna1a73yeq" path="res://scripts/level/PopupHint.gd" id="1_eadiv"]
+[ext_resource type="FontFile" uid="uid://vmw4opio331" path="res://resources/fonts/Font_EFIGS_rabbids_go_home.ttf" id="2_acmmo"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_acmmo"]
+
+[node name="PopupHint" type="Node2D" unique_id=1777477156 node_paths=PackedStringArray("hint")]
+script = ExtResource("1_eadiv")
+label_settings = SubResource("LabelSettings_acmmo")
+hint = NodePath("Hint")
+
+[node name="Hint" type="Control" parent="." unique_id=1443419384]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Hint" unique_id=1736357285]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("2_acmmo")

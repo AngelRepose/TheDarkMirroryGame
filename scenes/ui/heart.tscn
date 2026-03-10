@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://tcqks8p0lijc"]
+
+[ext_resource type="SpriteFrames" uid="uid://dj3tuppa7bqqc" path="res://resources/ui/hearts.tres" id="1_86inv"]
+[ext_resource type="Script" uid="uid://d0s8a4uqkemfp" path="res://scripts/ui/heart.gd" id="1_gwnj5"]
+[ext_resource type="SpriteFrames" uid="uid://ckabmvec3l58g" path="res://resources/ui/hearts_inverted.tres" id="3_rlach"]
+
+[node name="Heart" type="Control" unique_id=1205846515]
+custom_minimum_size = Vector2(69, 69)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 72.624
+offset_bottom = 72.624
+script = ExtResource("1_gwnj5")
+frames1 = ExtResource("1_86inv")
+frames2 = ExtResource("3_rlach")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=590282257]
+position = Vector2(36.312, 36.312)
+scale = Vector2(3.6, 3.6)
+sprite_frames = ExtResource("1_86inv")
+animation = &"lose"
+frame = 4
+frame_progress = 1.0

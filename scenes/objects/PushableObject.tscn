@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cd2jiorjaogcb"]
+
+[ext_resource type="Script" uid="uid://2mgs827xkoni" path="res://scripts/objects/pushableObject.gd" id="1_esuab"]
+[ext_resource type="Texture2D" uid="uid://c63xc6ahno554" path="res://resources/level/TestLevel.png" id="1_gomhi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gomhi"]
+atlas = ExtResource("1_gomhi")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_esuab"]
+radius = 16.0
+
+[node name="PushableObject" type="CharacterBody2D" unique_id=2081964781 groups=["Pushable"]]
+collision_layer = 4
+collision_mask = 7
+wall_min_slide_angle = 0.70162237
+floor_constant_speed = true
+floor_snap_length = 6.0
+platform_on_leave = 2
+platform_floor_layers = 4294967040
+script = ExtResource("1_esuab")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1883026012]
+texture = SubResource("AtlasTexture_gomhi")
+
+[node name="CollisionCircle" type="CollisionShape2D" parent="." unique_id=1480295417]
+shape = SubResource("CircleShape2D_esuab")
+
+[node name="CollisionBox" type="CollisionPolygon2D" parent="." unique_id=847813662]
+position = Vector2(0, -6)
+polygon = PackedVector2Array(-16, 6, -16, -7, -13, -10, 13, -10, 16, -7, 16, 6)

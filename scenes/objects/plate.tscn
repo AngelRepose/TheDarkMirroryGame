@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://df8wtvk82p12o"]
+
+[ext_resource type="Script" uid="uid://nr37wn6fuo3r" path="res://scripts/objects/plate.gd" id="1_vlv0k"]
+[ext_resource type="SpriteFrames" uid="uid://d2xos8du150ds" path="res://resources/Objects/plate.tres" id="2_vlv0k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]
+size = Vector2(23, 2)
+
+[node name="Plate" type="StaticBody2D" unique_id=63445155]
+collision_mask = 15
+script = ExtResource("1_vlv0k")
+
+[node name="PushZone" type="Area2D" parent="." unique_id=1994096165]
+collision_layer = 0
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PushZone" unique_id=604583066]
+position = Vector2(0.5, 12)
+shape = SubResource("RectangleShape2D_0e48y")
+
+[node name="CollisonPolygon2D" type="CollisionPolygon2D" parent="." unique_id=442386647]
+polygon = PackedVector2Array(13, 12, 17, 16, -17, 16, -13, 12)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=976635329]
+sprite_frames = ExtResource("2_vlv0k")
+animation = &"release"
+frame = 1
+frame_progress = 1.0
