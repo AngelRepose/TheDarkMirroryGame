@@ -7,8 +7,8 @@
 
 [node name="PopupHint" type="Node2D" unique_id=1777477156 node_paths=PackedStringArray("hint")]
 script = ExtResource("1_eadiv")
-label_settings = SubResource("LabelSettings_acmmo")
 hint = NodePath("Hint")
+label_settings = SubResource("LabelSettings_acmmo")
 
 [node name="Hint" type="Control" parent="." unique_id=1443419384]
 layout_mode = 3
