@@ -4,7 +4,7 @@ class_name PushableObject
 
 ## Состояния объекта
 enum State {IDLE, PUSHED, SLIDING, AIR}
-
+@export var uid: StringName
 @export_group("Движение")
 ## Максимальная скорость, с которой могут толкать ящик
 @export var max_push_speed: float = 140.0

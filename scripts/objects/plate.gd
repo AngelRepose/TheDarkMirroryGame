@@ -12,8 +12,8 @@ enum ActivatorType {PLAYER, PUSHABLE, BOTH}
 ## Время удержания для срабатывания
 @export var press_time: float = 0.1
 
-## Смещение спрайта при нажатии
-@export var pressed_offset: Vector2 = Vector2(0, 2)
+## Измерение, в котором работает плита (-1 = любое)
+@export var dimension: int = -1
 
 ## Анимированный спрайт плиты
 @onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -27,16 +27,19 @@ var _objects_in_zone: Array[Node2D] = []
 ## Таймер удержания
 var _press_timer: float = 0.0
 
-## Исходная позиция спрайта
-var _origin_pos: Vector2
+## Ссылка на уровень
+var _level: BaseLevel
 
 func _ready() -> void:
 	super._ready()
 	_push_zone.body_entered.connect(_on_body_entered)
 	_push_zone.body_exited.connect(_on_body_exited)
-	_origin_pos = _sprite.position
+	_level = _find_level()
 
 func _process(delta: float) -> void:
+	if not _is_in_correct_dimension():
+		return
+	
 	var has_valid_activator: bool = _check_for_activators()
 	
 	if has_valid_activator:
@@ -48,8 +51,15 @@ func _process(delta: float) -> void:
 	if should_be_pressed != is_active:
 		if should_be_pressed:
 			activate()
+			_play_animation("press")
 		else:
 			deactivate()
+			_play_animation("release")
+
+func _is_in_correct_dimension() -> bool:
+	if dimension < 0 or not _level:
+		return true
+	return _level.current_dimension == dimension
 
 func _check_for_activators() -> bool:
 	for obj: Node2D in _objects_in_zone:
@@ -63,13 +73,16 @@ func _check_for_activators() -> bool:
 				if obj is PushableObject:
 					return true
 			ActivatorType.BOTH:
-				return true
+				if obj is Player or obj is PushableObject:
+					return true
 	return false
 
 func _update_visuals() -> void:
-	if _sprite:
-		# _sprite.position = _origin_pos + (pressed_offset if is_active else Vector2.ZERO)
-		_sprite.play("press" if is_active else "release")
+	pass
+
+func _play_animation(anim_name: String) -> void:
+	if _sprite and _sprite.animation != anim_name:
+		_sprite.play(anim_name)
 
 func _on_body_entered(body: Node2D) -> void:
 	if not _objects_in_zone.has(body):
@@ -77,3 +90,11 @@ func _on_body_entered(body: Node2D) -> void:
 
 func _on_body_exited(body: Node2D) -> void:
 	_objects_in_zone.erase(body)
+
+func _find_level() -> BaseLevel:
+	var node := get_parent()
+	while node:
+		if node is BaseLevel:
+			return node
+		node = node.get_parent()
+	return null

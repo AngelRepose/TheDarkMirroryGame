@@ -16,17 +16,14 @@ jump_velocity = -350.0
 [node name="Camera" type="Camera2D" parent="." unique_id=855863405]
 zoom = Vector2(2.5, 2.5)
 limit_left = 0
-limit_bottom = 700
+limit_bottom = 640
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="." unique_id=817824957]
 scale = Vector2(1.5187303, 1.5187303)
 sprite_frames = ExtResource("2_4kuee")
-animation = &"die"
+animation = &"idle"
 autoplay = "idle"
-frame = 13
-frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=2063103636]
-visible = false
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_kpjcp")

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c0iloe8xef5ae"]
 
-[ext_resource type="Script" uid="uid://cu8at4cci1daj" path="res://scenes/ui/choice_levels.gd" id="1_3m31h"]
+[ext_resource type="Script" uid="uid://cu8at4cci1daj" path="res://scripts/ui/choice_levels.gd" id="1_3m31h"]
 [ext_resource type="FontFile" uid="uid://cfn4h3h2hfydm" path="res://resources/fonts/Aleho Scribble.otf" id="1_nkj57"]
-[ext_resource type="PackedScene" uid="uid://ca6mdvuf08lp1" path="res://scenes/levels/TestLevel.tscn" id="2_uh12c"]
+[ext_resource type="PackedScene" uid="uid://drpxx6stwqgjs" path="res://scenes/levels/ExampleLevel.tscn" id="3_21fti"]
 [ext_resource type="Texture2D" uid="uid://by06y0n8adgcc" path="res://resources/ui/menuBackground.png" id="3_ljbul"]
 [ext_resource type="Theme" uid="uid://bart274soe5d1" path="res://resources/ui/themes/main_menu.tres" id="6_afj8i"]
 
@@ -22,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("6_afj8i")
 script = ExtResource("1_3m31h")
-loaded_scenes = Array[PackedScene]([ExtResource("2_uh12c")])
+loaded_scenes = Array[PackedScene]([ExtResource("3_21fti"), ExtResource("3_21fti")])
 levels_list_panel = NodePath("MarginContainer2/VBoxContainer/LevelsList")
 levels_vbox_container = NodePath("MarginContainer2/VBoxContainer/LevelsList/MarginContainer/VBoxContainer")
 button_reference = NodePath("Level0ButtonTemplete")

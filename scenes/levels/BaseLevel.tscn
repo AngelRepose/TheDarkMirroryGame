@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://r54ydasrgqk"]
+
+[ext_resource type="Script" uid="uid://bn54txenft35q" path="res://scripts/level/base_level.gd" id="1_xxmur"]
+[ext_resource type="Script" uid="uid://iat57rtqa64b" path="res://scripts/level/base_dimension.gd" id="2_0plv3"]
+[ext_resource type="TileSet" uid="uid://bmtwtfkiilus" path="res://resources/level/TileSet.tres" id="2_uyfon"]
+[ext_resource type="Script" uid="uid://b1dvhfmqh2icw" path="res://scripts/level/spawnpoint.gd" id="3_erm5t"]
+[ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://scenes/player/Player.tscn" id="4_uyfon"]
+[ext_resource type="PackedScene" uid="uid://dv22vo8xukorv" path="res://scenes/ui/hud.tscn" id="5_blrrs"]
+
+[sub_resource type="TileSet" id="TileSet_uyfon"]
+
+[sub_resource type="TileSet" id="TileSet_blrrs"]
+
+[sub_resource type="TileSet" id="TileSet_kkhbh"]
+
+[node name="BaseLevel" type="Node2D" unique_id=1608145668 node_paths=PackedStringArray("player", "dimension_1", "dimension_2", "swap_effect")]
+script = ExtResource("1_xxmur")
+player = NodePath("Player")
+dimension_1 = NodePath("NormalDimension")
+dimension_2 = NodePath("AlternativeDimension")
+swap_effect = NodePath("SwapEffect/SwapEffect")
+metadata/_custom_type_script = "uid://bn54txenft35q"
+
+[node name="NormalBackground" type="TileMapLayer" parent="." unique_id=338303664]
+tile_set = ExtResource("2_uyfon")
+
+[node name="AlternativeBackground" type="TileMapLayer" parent="." unique_id=1135396797]
+tile_set = SubResource("TileSet_uyfon")
+
+[node name="NormalDimension" type="TileMapLayer" parent="." unique_id=2112375942 node_paths=PackedStringArray("background")]
+tile_set = SubResource("TileSet_blrrs")
+script = ExtResource("2_0plv3")
+uid = &"dim0"
+background = NodePath("../NormalBackground")
+metadata/_custom_type_script = "uid://iat57rtqa64b"
+
+[node name="AlternativeDimension" type="TileMapLayer" parent="." unique_id=677575675 node_paths=PackedStringArray("background")]
+tile_set = SubResource("TileSet_kkhbh")
+script = ExtResource("2_0plv3")
+uid = &"dim1"
+background = NodePath("../AlternativeBackground")
+default_enabled = false
+metadata/_custom_type_script = "uid://iat57rtqa64b"
+
+[node name="SpawnPoint" type="Node2D" parent="." unique_id=2062179808]
+script = ExtResource("3_erm5t")
+metadata/_custom_type_script = "uid://b1dvhfmqh2icw"
+
+[node name="Player" parent="." unique_id=697792572 instance=ExtResource("4_uyfon")]
+
+[node name="HUD" parent="." unique_id=1434122315 instance=ExtResource("5_blrrs")]
+
+[node name="SwapEffect" type="CanvasLayer" parent="." unique_id=201856779]
+
+[node name="SwapEffect" type="ColorRect" parent="SwapEffect" unique_id=203428713]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

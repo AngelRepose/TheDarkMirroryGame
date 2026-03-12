@@ -2,11 +2,8 @@ extends CanvasLayer
 ## HUD для отображения здоровья и текущего измерения
 class_name HUD
 
-## Ссылка на игрока
-@export var player: Player
-
-## Ссылка на уровень
-@export var level: BaseLevel
+@onready var player: Player
+@onready var level: BaseLevel
 
 ## Массив сердец для отображения здоровья
 @export var hearts: Array[Heart]
@@ -15,6 +12,10 @@ class_name HUD
 var _last_hp: int = 0
 
 func _ready() -> void:
+	if not player:
+		player = get_parent().get_node("Player")
+	if not level:
+		level = get_parent()
 	player.health_changed.connect(_on_player_health_changed)
 	level.dimension_changed.connect(_on_dimension_changed)
 	_last_hp = player.get_current_hp()

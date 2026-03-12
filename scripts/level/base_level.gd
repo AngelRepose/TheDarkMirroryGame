@@ -1,4 +1,5 @@
 extends Node2D
+
 ## Базовый класс уровня с поддержкой двух измерений
 class_name BaseLevel
 
@@ -10,21 +11,15 @@ enum Dimension {DIM1 = 0, DIM2 = 1}
 
 ## Сцена игрока
 @export var player: Player
-@export var spawn_point: Node2D
 
 @export_group("Измерения")
 ## Измерение по умолчанию при старте уровня
 @export var default_dimension: Dimension = Dimension.DIM1
-## Сдвиг при телепортации меж измерениями (по X вправо) в пикселях. В блоках - *32
-@export var dimension_offset: float = 1000*32
 ## Нода 1 измерения
-@export var dimension_1: TileMapLayer
-## 
-@export var dimension_1_bg: TileMapLayer
+@export var dimension_1: BaseDimension
 
 ## Нода 2 измерения
-@export var dimension_2: TileMapLayer
-@export var dimension_2_bg: TileMapLayer
+@export var dimension_2: BaseDimension
 
 @export_group("Перезапуск")
 ## Перезапускать ли сцену при смерти игрока
@@ -48,7 +43,7 @@ enum Dimension {DIM1 = 0, DIM2 = 1}
 @export var swap_duration: float = 0.4
 
 ## Цвет вспышки при смене измерения
-@export var swap_color: Color = Color.WHITE
+@export var swap_color: Color = Color(0.204, 0.0, 0.204, 1.0)
 
 ## Использовать прозрачный цвет для затухания
 @export var swap_fade_to_transparent: bool = true
@@ -56,11 +51,15 @@ enum Dimension {DIM1 = 0, DIM2 = 1}
 ## Задержка перед сменой измерения (после вспышки)
 @export var swap_delay: float = 0.0
 
+@onready var spawn_point: SpawnPoint = get_node("SpawnPoint")
+
 ## Текущее активное измерение
 var current_dimension: Dimension = default_dimension
 
 ## Флаг процесса перезапуска уровня
 var _is_restarting: bool = false
+
+var hud: HUD
 
 ## Менеджер триггеров
 var trigger_manager: TriggerManager
@@ -69,21 +68,33 @@ func _ready() -> void:
 	add_to_group("Level")
 	if not _validate_nodes():
 		return
+	_update_dimensions(default_dimension)
 	if spawn_point:
 		player.position = spawn_point.position
-	_apply_dimension_swap(default_dimension)
 	_connect_player_signals()
+	_setup_hud()
 	_setup_trigger_manager()
 	FadeManager.default_color = restart_fade_color
 
+func _process(_delta):
+	if Input.is_action_just_pressed("swap_dimension"):
+		swap_dimension()
+
+func _setup_hud() -> void:
+	hud = _find_child_by_type(HUD) as HUD
+	if not hud:
+		hud = HUD.new()
+	hud.player = player
+	hud.level = self
+
 func _setup_trigger_manager() -> void:
-	# Ищем существующий TriggerManager или создаём новый
 	trigger_manager = _find_child_by_type(TriggerManager) as TriggerManager
 	if not trigger_manager:
 		trigger_manager = TriggerManager.new()
 		trigger_manager.name = "TriggerManager"
 		trigger_manager.level = self
 		add_child(trigger_manager)
+	
 
 func restart_level() -> void:
 	if _is_restarting:
@@ -98,7 +109,7 @@ func swap_dimension() -> void:
 	
 	if swap_delay > 0:
 		tween.tween_interval(swap_delay)
-	tween.tween_callback(_apply_dimension_swap)
+	tween.tween_callback(_update_dimensions)
 	tween.tween_property(swap_effect, "modulate", fade_out_color, swap_duration * 0.6)
 
 func _validate_nodes() -> bool:
@@ -122,24 +133,16 @@ func _connect_player_signals() -> void:
 	}))
 	player.died.connect(_on_player_died)
 
-func _apply_dimension_swap(dimension: Variant = null) -> void:
+func _update_dimensions(dimension: Variant = null) -> void:
 	if dimension != null:
 		current_dimension = dimension
 	else:
 		current_dimension = Dimension.DIM1 if current_dimension == Dimension.DIM2 else Dimension.DIM2
 	
-	_update_dimensions()
+	match current_dimension:
+		Dimension.DIM1: dimension_1.enable(); dimension_2.disable()
+		Dimension.DIM2: dimension_2.enable(); dimension_1.disable()
 	dimension_changed.emit(current_dimension)
-	
-func _update_dimensions() -> void:
-	var is_dim2 := current_dimension
-	
-	dimension_1.enabled = not is_dim2
-	dimension_1.visible = not is_dim2
-	dimension_1_bg.visible = not is_dim2
-	dimension_2.enabled = is_dim2
-	dimension_2.visible = is_dim2
-	dimension_2_bg.visible = is_dim2
 
 func _on_player_died() -> void:
 	restart_level()
