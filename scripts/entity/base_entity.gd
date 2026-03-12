@@ -65,6 +65,12 @@ func can_take_damage() -> bool:
 func get_current_hp() -> int:
 	return _hp
 
+func kill(skip_anim: bool = true) -> void:
+	if _is_dead:
+		return
+	health_changed.emit(0, max_hp)
+	_die(skip_anim)
+
 func damage(amount: int = 1) -> void:
 	if _is_dead:
 		return
@@ -94,7 +100,7 @@ func _play_animation(anim_name: String) -> void:
 	if animated_sprite and animated_sprite.animation != anim_name:
 		animated_sprite.play(anim_name)
 
-func _die() -> void:
+func _die(skip_anim: bool = false) -> void:
 	if _is_dead:
 		return
 
@@ -107,8 +113,7 @@ func _die() -> void:
 
 	if _collision != null:
 		_collision.call_deferred("set_disabled", true)
-
-	if animated_sprite != null and animated_sprite.sprite_frames != null and animated_sprite.sprite_frames.has_animation("die"):
+	if not skip_anim and animated_sprite != null and animated_sprite.sprite_frames != null and animated_sprite.sprite_frames.has_animation("die"):
 		animated_sprite.play("die")
 		await animated_sprite.animation_finished
 

@@ -13,13 +13,15 @@ enum LeverType {TOGGLE, MOMENTARY}
 @export var cooldown: float = 0.2
 
 ## Текст подсказки
-@export var hint_text: String = "[E] Interact "
+@export var hint_text: String = "[F] Использовать"
 
 ## Настройки метки подсказки
 @export var label_settings: LabelSettings
 
-## Измерение, в котором работает рычаг (-1 = любое)
-@export var dimension: int = -1
+@export var dimension_specific: bool = false
+
+## Измерение для показа
+@export var show_in_dimension: BaseLevel.Dimension = BaseLevel.Dimension.DIM1
 
 ## Анимированный спрайт рычага
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
@@ -63,9 +65,9 @@ func _interact() -> void:
 	_start_cooldown()
 
 func _is_in_correct_dimension() -> bool:
-	if dimension < 0 or not _level:
+	if not dimension_specific or not _level:
 		return true
-	return _level.current_dimension == dimension
+	return _level.current_dimension == show_in_dimension
 
 func _update_visuals() -> void:
 	if anim:
@@ -73,7 +75,8 @@ func _update_visuals() -> void:
 
 func _start_cooldown() -> void:
 	can_interact = false
-	await get_tree().create_timer(cooldown).timeout
+	if is_inside_tree():
+		await get_tree().create_timer(cooldown).timeout
 	can_interact = true
 
 func _find_level() -> BaseLevel:

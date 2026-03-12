@@ -21,15 +21,20 @@ collision_layer = 0
 collision_mask = 8
 script = ExtResource("1_donkj")
 type = 1
-is_active = true
-hint_text = "[F] Использовать"
 label_settings = SubResource("LabelSettings_q11tp")
+is_active = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=565136851]
 sprite_frames = ExtResource("1_06vmi")
 animation = &"on"
 frame = 4
 frame_progress = 1.0
+
+[node name="PopupHint" parent="." unique_id=1777477156 instance=ExtResource("3_1gg2o")]
+label_settings = ExtResource("5_q11tp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PopupHint" unique_id=1148151147]
+shape = SubResource("CircleShape2D_06vmi")
 
 [node name="InteractionZone" type="Area2D" parent="." unique_id=32043707]
 collision_layer = 0
@@ -41,8 +46,3 @@ shape = SubResource("CircleShape2D_06vmi")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1356435929]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_06vmi")
-
-[node name="PopupHint" parent="." unique_id=1777477156 node_paths=PackedStringArray("area") instance=ExtResource("3_1gg2o")]
-position = Vector2(-42, -38)
-area = NodePath("../InteractionZone")
-label_settings = ExtResource("5_q11tp")

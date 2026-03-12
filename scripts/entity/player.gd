@@ -16,6 +16,8 @@ class_name Player
 ## Время, в течении которого после приземления буфферизуется нажатие прыжка
 @export var jump_buffer_time: float = 0.05
 
+@onready var camera: Camera2D = $Camera
+
 ## Таймер coyote time для прыжка после схода с платформы
 var _coyote_timer: float = 0.0
 

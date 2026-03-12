@@ -52,19 +52,20 @@ enum Dimension {DIM1 = 0, DIM2 = 1}
 @export var swap_delay: float = 0.0
 
 @onready var spawn_point: SpawnPoint = get_node("SpawnPoint")
-
+@onready var pause_menu: CanvasLayer = get_node("PauseMenu")
 ## Текущее активное измерение
 var current_dimension: Dimension = default_dimension
 
-## Флаг процесса перезапуска уровня
-var _is_restarting: bool = false
-
+var _is_restarting: bool = true
+var _is_paused: bool = false
+var _can_pause: bool = false  # Флаг разрешения на паузу
 var hud: HUD
 
 ## Менеджер триггеров
 var trigger_manager: TriggerManager
 
 func _ready() -> void:
+	_setup_pause_delay()
 	add_to_group("Level")
 	if not _validate_nodes():
 		return
@@ -75,10 +76,42 @@ func _ready() -> void:
 	_setup_hud()
 	_setup_trigger_manager()
 	FadeManager.default_color = restart_fade_color
+	_is_restarting = false
+	player.camera.limit_right = 1152
 
-func _process(_delta):
-	if Input.is_action_just_pressed("swap_dimension"):
+func _finish_level(any = null) -> void:
+	print("level finished")
+	get_tree().change_scene_to_file("res://scenes/ui/menu.tscn")
+
+func _setup_pause_delay() -> void:
+	_can_pause = false
+	
+	# Создаем и запускаем таймер
+	var pause_timer := Timer.new()
+	pause_timer.name = "PauseDelayTimer"
+	pause_timer.wait_time = 0.8
+	pause_timer.one_shot = true
+	pause_timer.timeout.connect(_on_pause_delay_timeout)
+	add_child(pause_timer)
+	pause_timer.start()
+
+func _on_pause_delay_timeout() -> void:
+	_can_pause = true
+
+func _input(event: InputEvent) -> void:
+	if not _is_restarting:
+		if event.is_action_pressed("ui_cancel") and _can_pause:
+			_is_paused = not _is_paused
+			pause_menu.pause()
+	if event.is_action_pressed("swap_dimension"):
 		swap_dimension()
+		
+
+func _on_death_zone_entered(body: Node2D) -> void:
+	if not body is Player:
+		return
+	body.kill(true)
+	
 
 func _setup_hud() -> void:
 	hud = _find_child_by_type(HUD) as HUD

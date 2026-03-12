@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://b1dvhfmqh2icw" path="res://scripts/level/spawnpoint.gd" id="3_erm5t"]
 [ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://scenes/player/Player.tscn" id="4_uyfon"]
 [ext_resource type="PackedScene" uid="uid://dv22vo8xukorv" path="res://scenes/ui/hud.tscn" id="5_blrrs"]
+[ext_resource type="PackedScene" uid="uid://wm0ovs0ldrps" path="res://scenes/ui/pauseMenu.tscn" id="7_blrrs"]
 
 [sub_resource type="TileSet" id="TileSet_uyfon"]
 
@@ -13,12 +14,15 @@
 
 [sub_resource type="TileSet" id="TileSet_kkhbh"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uyfon"]
+size = Vector2(4114, 7)
+
 [node name="BaseLevel" type="Node2D" unique_id=1608145668 node_paths=PackedStringArray("player", "dimension_1", "dimension_2", "swap_effect")]
 script = ExtResource("1_xxmur")
 player = NodePath("Player")
 dimension_1 = NodePath("NormalDimension")
 dimension_2 = NodePath("AlternativeDimension")
-swap_effect = NodePath("SwapEffect/SwapEffect")
+swap_effect = NodePath("CanvasLayer/SwapEffect")
 metadata/_custom_type_script = "uid://bn54txenft35q"
 
 [node name="NormalBackground" type="TileMapLayer" parent="." unique_id=338303664]
@@ -48,14 +52,28 @@ metadata/_custom_type_script = "uid://b1dvhfmqh2icw"
 
 [node name="Player" parent="." unique_id=697792572 instance=ExtResource("4_uyfon")]
 
+[node name="DeathZone" type="Area2D" parent="." unique_id=470049898]
+position = Vector2(0, 640)
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathZone" unique_id=2037107536]
+position = Vector2(2057, 3.5)
+shape = SubResource("RectangleShape2D_uyfon")
+
 [node name="HUD" parent="." unique_id=1434122315 instance=ExtResource("5_blrrs")]
 
-[node name="SwapEffect" type="CanvasLayer" parent="." unique_id=201856779]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=201856779]
 
-[node name="SwapEffect" type="ColorRect" parent="SwapEffect" unique_id=203428713]
+[node name="SwapEffect" type="ColorRect" parent="CanvasLayer" unique_id=203428713]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PauseMenu" parent="." unique_id=1499051207 instance=ExtResource("7_blrrs")]
+visible = false
+
+[connection signal="body_entered" from="DeathZone" to="." method="_on_death_zone_entered"]
