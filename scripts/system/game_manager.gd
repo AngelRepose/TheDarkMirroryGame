@@ -14,6 +14,7 @@ var levels: Dictionary[StringName, PackedScene] = {
 	&"level_1": preload("res://scenes/levels/level_1.tscn") as PackedScene,
 	&"level_2": preload("res://scenes/levels/level_2.tscn") as PackedScene,
 	&"level_3": preload("res://scenes/levels/level_3.tscn") as PackedScene,
+	#&"level_4": preload("res://scenes/levels/level_4.tscn") as PackedScene,
 }
 
 ## Ссылка на игрока
@@ -70,7 +71,7 @@ func get_swap_effect() -> ColorRect:
 ## Возвращает уровень по его UID.
 ## [param uid] — уникальный идентификатор уровня
 func get_level_by_uid(uid: StringName) -> PackedScene:
-	return levels.get(uid)
+	return levels.get(uid, null)
 
 
 ## Возвращает уровень по пути к сцене.
@@ -100,6 +101,9 @@ func to_main_menu() -> void:
 func open_level(level_uid: StringName) -> void:
 	SaveManager.set_current_level(level_uid)
 	var _level: PackedScene = get_level_by_uid(level_uid)
+	if not _level: 
+		to_main_menu()
+		return
 	GameManager.debug(self.LOG_PREFIX\
 	+ "Загрузка уровня {}\n", 
 	[_level.resource_path]

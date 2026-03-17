@@ -81,6 +81,5 @@ grow_vertical = 2
 visible = false
 
 [node name="FinishMenu" parent="." unique_id=392967959 instance=ExtResource("7_kkhbh")]
-visible = false
 
 [connection signal="body_entered" from="DeathZone" to="." method="_on_death_zone_entered"]

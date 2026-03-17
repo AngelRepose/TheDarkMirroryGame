@@ -13,7 +13,7 @@ collision_mask = 39
 script = ExtResource("1_gfjak")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=855863405]
-zoom = Vector2(2.5, 2.5)
+zoom = Vector2(3, 3)
 limit_left = 0
 limit_bottom = 640
 
