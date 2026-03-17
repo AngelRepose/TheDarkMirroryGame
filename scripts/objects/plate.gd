@@ -1,11 +1,12 @@
 extends BaseActivator
-## Нажимная плита, активируемая игроком или толкаемыми объектами
+
+## Нажимная плита, активируемая игроком или толкаемыми объектами.
+
 class_name Plate
 
-## Типы активаторов плиты
+## Типы активаторов
 enum ActivatorType {PLAYER, PUSHABLE, BOTH}
 
-@export_group("Настройки")
 ## Кто может активировать плиту
 @export var activator_type: ActivatorType = ActivatorType.BOTH
 
@@ -15,26 +16,33 @@ enum ActivatorType {PLAYER, PUSHABLE, BOTH}
 ## Измерение, в котором работает плита (-1 = любое)
 @export var dimension: int = -1
 
-## Анимированный спрайт плиты
-@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
+## Анимированный спрайт
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D as AnimatedSprite2D
 
-## Зона обнаружения объектов
-@onready var _push_zone: Area2D = $PushZone
+## Зона обнаружения
+@onready var _push_zone: Area2D = $PushZone as Area2D
 
-## Объекты, находящиеся в зоне плиты
+## Объекты в зоне
 var _objects_in_zone: Array[Node2D] = []
 
 ## Таймер удержания
 var _press_timer: float = 0.0
 
 ## Ссылка на уровень
-var _level: BaseLevel
+var _level: BaseLevel = null
+
 
 func _ready() -> void:
 	super._ready()
+	LOG_PREFIX = &"[Plate] "
 	_push_zone.body_entered.connect(_on_body_entered)
 	_push_zone.body_exited.connect(_on_body_exited)
 	_level = _find_level()
+	GameManager.debug(self.LOG_PREFIX\
+	+ "Загружен, trigger_id: {}\n", 
+	[str(trigger_id) if trigger_id else "без id"]
+	)
+
 
 func _process(delta: float) -> void:
 	if not _is_in_correct_dimension():
@@ -56,11 +64,16 @@ func _process(delta: float) -> void:
 			deactivate()
 			_play_animation("release")
 
+
+## Проверяет, находится ли плита в правильном измерении.
 func _is_in_correct_dimension() -> bool:
 	if dimension < 0 or not _level:
 		return true
 	return _level.current_dimension == dimension
 
+
+## Проверяет наличие активаторов в зоне.
+## Возвращает true если есть подходящий активатор.
 func _check_for_activators() -> bool:
 	for obj: Node2D in _objects_in_zone:
 		if not is_instance_valid(obj):
@@ -77,22 +90,36 @@ func _check_for_activators() -> bool:
 					return true
 	return false
 
+
+## Обновляет визуальное состояние.
 func _update_visuals() -> void:
 	pass
 
+
+## Воспроизводит анимацию.
+## [param anim_name] — название анимации
 func _play_animation(anim_name: String) -> void:
 	if _sprite and _sprite.animation != anim_name:
 		_sprite.play(anim_name)
 
+
+## Вызывается при входе тела в зону.
+## [param body] — вошедший узел
 func _on_body_entered(body: Node2D) -> void:
 	if not _objects_in_zone.has(body):
 		_objects_in_zone.append(body)
 
+
+## Вызывается при выходе тела из зоны.
+## [param body] — вышедший узел
 func _on_body_exited(body: Node2D) -> void:
 	_objects_in_zone.erase(body)
 
+
+## Находит родительский уровень.
+## Возвращает найденный уровень или null.
 func _find_level() -> BaseLevel:
-	var node := get_parent()
+	var node: Node = get_parent()
 	while node:
 		if node is BaseLevel:
 			return node

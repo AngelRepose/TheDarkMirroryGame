@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://c0iloe8xef5ae"]
 
-[ext_resource type="Script" uid="uid://cu8at4cci1daj" path="res://scripts/ui/choice_levels.gd" id="1_3m31h"]
-[ext_resource type="FontFile" uid="uid://cfn4h3h2hfydm" path="res://resources/fonts/Aleho Scribble.otf" id="1_nkj57"]
-[ext_resource type="PackedScene" uid="uid://drpxx6stwqgjs" path="res://scenes/levels/ExampleLevel.tscn" id="3_21fti"]
+[ext_resource type="Script" uid="uid://dvjqxjjuablqb" path="res://scripts/ui/choice_levels.gd" id="1_3m31h"]
 [ext_resource type="Texture2D" uid="uid://by06y0n8adgcc" path="res://resources/ui/menuBackground.png" id="3_ljbul"]
+[ext_resource type="Texture2D" uid="uid://fjk5eysy7oxp" path="res://resources/ui/lock.png" id="4_pecii"]
 [ext_resource type="Theme" uid="uid://bart274soe5d1" path="res://resources/ui/themes/main_menu.tres" id="6_afj8i"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ljbul"]
@@ -13,7 +12,7 @@ corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
-[node name="ChoiceLevels" type="Control" unique_id=1173563425 node_paths=PackedStringArray("levels_list_panel", "levels_vbox_container", "button_reference")]
+[node name="ChoiceLevels" type="Control" unique_id=1173563425 node_paths=PackedStringArray("button_reference", "grid_container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,10 +21,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("6_afj8i")
 script = ExtResource("1_3m31h")
-loaded_scenes = Array[PackedScene]([ExtResource("3_21fti"), ExtResource("3_21fti")])
-levels_list_panel = NodePath("MarginContainer2/VBoxContainer/LevelsList")
-levels_vbox_container = NodePath("MarginContainer2/VBoxContainer/LevelsList/MarginContainer/VBoxContainer")
-button_reference = NodePath("Level0ButtonTemplete")
+button_reference = NodePath("LevelButtonTemplate")
+grid_container = NodePath("Margin/VBoxContainer/LevelsList/Margin/VScroll/Grid")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1057438831]
 modulate = Color(0.41568628, 0.41568628, 0.41568628, 1)
@@ -38,20 +35,42 @@ grow_vertical = 2
 texture = ExtResource("3_ljbul")
 expand_mode = 1
 
-[node name="Level0ButtonTemplete" type="Button" parent="." unique_id=1868474417]
-visible = false
-custom_minimum_size = Vector2(100, 100)
+[node name="LevelButtonTemplate" type="Button" parent="." unique_id=1868474417]
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 0
-offset_left = -335.0
-offset_top = 77.0
-offset_right = -185.0
-offset_bottom = 213.0
+offset_left = -150.0
+offset_bottom = 150.0
 theme = ExtResource("6_afj8i")
-theme_override_fonts/font = ExtResource("1_nkj57")
-theme_override_font_sizes/font_size = 66
+theme_override_font_sizes/font_size = 70
 text = "1"
 
-[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=1446540280]
+[node name="Lock" type="Panel" parent="LevelButtonTemplate" unique_id=1471501066]
+self_modulate = Color(0, 0, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="LevelButtonTemplate/Lock" unique_id=1821660874]
+self_modulate = Color(0, 0, 0, 0.84705883)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.75
+offset_top = -70.75
+offset_right = 70.75
+offset_bottom = 70.75
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_pecii")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1446540280]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,30 +82,36 @@ theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 150
 theme_override_constants/margin_bottom = 80
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2" unique_id=615688585]
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin" unique_id=615688585]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="BackButton" type="Button" parent="MarginContainer2/VBoxContainer" unique_id=1188627301]
+[node name="BackButton" type="Button" parent="Margin/VBoxContainer" unique_id=1188627301]
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 40
 text = "Back"
 
-[node name="LevelsList" type="PanelContainer" parent="MarginContainer2/VBoxContainer" unique_id=1017643546]
+[node name="LevelsList" type="PanelContainer" parent="Margin/VBoxContainer" unique_id=1017643546]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_ljbul")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/LevelsList" unique_id=1452887497]
+[node name="Margin" type="MarginContainer" parent="Margin/VBoxContainer/LevelsList" unique_id=1452887497]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/VBoxContainer/LevelsList/MarginContainer" unique_id=1752525147]
+[node name="VScroll" type="ScrollContainer" parent="Margin/VBoxContainer/LevelsList/Margin" unique_id=2086226694]
 layout_mode = 2
 
-[connection signal="pressed" from="MarginContainer2/VBoxContainer/BackButton" to="." method="_on_back_pressed"]
+[node name="Grid" type="GridContainer" parent="Margin/VBoxContainer/LevelsList/Margin/VScroll" unique_id=942181087]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 10
+
+[connection signal="pressed" from="Margin/VBoxContainer/BackButton" to="." method="_on_back_pressed"]

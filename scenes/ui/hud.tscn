@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://dv22vo8xukorv"]
 
-[ext_resource type="Script" uid="uid://cm5fl3vugicov" path="res://scripts/ui/hud.gd" id="1_hqnrr"]
+[ext_resource type="Script" uid="uid://uhd2tlu1kdtf" path="res://scripts/ui/hud.gd" id="1_hqnrr"]
 [ext_resource type="PackedScene" uid="uid://tcqks8p0lijc" path="res://scenes/ui/heart.tscn" id="2_hqnrr"]
+[ext_resource type="SpriteFrames" uid="uid://dj3tuppa7bqqc" path="res://resources/ui/hearts.tres" id="3_8qguk"]
+[ext_resource type="SpriteFrames" uid="uid://ckabmvec3l58g" path="res://resources/ui/hearts_inverted.tres" id="4_136eg"]
 
 [node name="HUD" type="CanvasLayer" unique_id=1434122315 node_paths=PackedStringArray("hearts")]
 script = ExtResource("1_hqnrr")
@@ -18,6 +20,10 @@ layout_mode = 2
 
 [node name="Heart" parent="VBoxContainer/HealthContainer" unique_id=1205846515 instance=ExtResource("2_hqnrr")]
 layout_mode = 2
+frames1 = ExtResource("3_8qguk")
+frames2 = ExtResource("4_136eg")
 
-[node name="Heart2" parent="VBoxContainer/HealthContainer" unique_id=345951999 instance=ExtResource("2_hqnrr")]
+[node name="Heart2" parent="VBoxContainer/HealthContainer" unique_id=961856812 instance=ExtResource("2_hqnrr")]
 layout_mode = 2
+frames1 = ExtResource("3_8qguk")
+frames2 = ExtResource("4_136eg")

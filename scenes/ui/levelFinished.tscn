@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://knh4hje8ebif"]
+
+[ext_resource type="Script" uid="uid://b7sjqdxpleiyb" path="res://scripts/ui/level_finished.gd" id="1_4my5s"]
+[ext_resource type="Theme" uid="uid://bart274soe5d1" path="res://resources/ui/themes/main_menu.tres" id="2_s7x1j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aw6v6"]
+bg_color = Color(0.107367314, 0.107367314, 0.107367314, 0.78431374)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="FinishMenu" type="CanvasLayer" unique_id=1499051207 node_paths=PackedStringArray("next_button", "exit_button")]
+process_mode = 2
+script = ExtResource("1_4my5s")
+next_button = NodePath("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/NextButton")
+exit_button = NodePath("MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ExitButton")
+
+[node name="Panel" type="Panel" parent="." unique_id=14198953]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=103989567]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_s7x1j")
+theme_override_constants/margin_left = 400
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 400
+theme_override_constants/margin_bottom = 150
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1500846199]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_aw6v6")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer" unique_id=1818058091]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer" unique_id=1399942680]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1581428768]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 110
+text = "Level Finished"
+horizontal_alignment = 1
+
+[node name="NextButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1267663231]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 50
+text = "Next Level"
+
+[node name="ExitButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=832744886]
+layout_mode = 2
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 50
+text = "Exit"

@@ -1,16 +1,13 @@
 [gd_scene format=3 uid="uid://c3c4l5kf7llw8"]
 
-[ext_resource type="Script" uid="uid://by8jna1a73yeq" path="res://scripts/level/PopupHint.gd" id="1_eadiv"]
+[ext_resource type="Script" uid="uid://crts3kf73fkk1" path="res://scripts/level/popup_hint.gd" id="1_acmmo"]
 [ext_resource type="FontFile" uid="uid://vmw4opio331" path="res://resources/fonts/Font_EFIGS_rabbids_go_home.ttf" id="2_acmmo"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_acmmo"]
 
 [node name="PopupHint" type="Area2D" unique_id=275888668 node_paths=PackedStringArray("hint")]
 collision_layer = 0
 collision_mask = 8
-script = ExtResource("1_eadiv")
+script = ExtResource("1_acmmo")
 hint = NodePath("Hint")
-label_settings = SubResource("LabelSettings_acmmo")
 
 [node name="Hint" type="Control" parent="." unique_id=1443419384]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cd2jiorjaogcb"]
 
-[ext_resource type="Script" uid="uid://2mgs827xkoni" path="res://scripts/objects/pushableObject.gd" id="1_esuab"]
+[ext_resource type="Script" uid="uid://bfrvepupqvmf5" path="res://scripts/objects/pushable_object.gd" id="1_esuab"]
 [ext_resource type="Texture2D" uid="uid://c63xc6ahno554" path="res://resources/level/TestLevel.png" id="1_gomhi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gomhi"]

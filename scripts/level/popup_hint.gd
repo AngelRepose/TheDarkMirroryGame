@@ -1,5 +1,8 @@
 extends Area2D
-## Компонент всплывающей подсказки с анимацией
+
+## Компонент всплывающей подсказки с анимацией.
+## Показывает текст при входе игрока в зону.
+
 class_name PopupHint
 
 ## Вызывается когда игрок входит в зону
@@ -7,12 +10,18 @@ signal player_entered
 
 ## Вызывается когда игрок выходит из зоны
 signal player_exited
-@export var uid: StringName
+
+## Префикс для логирования
+var LOG_PREFIX: StringName = &"[PopupHint] "
+
+## Уникальный идентификатор
+@export var uid: StringName = &""
+
 ## Контейнер подсказки
-@export var hint: Control
+@export var hint: Control = null
 
 ## Настройки текста
-@export var label_settings: LabelSettings
+@export var label_settings: LabelSettings = null
 
 ## Текст подсказки
 @export_multiline var exp_text: String = ""
@@ -20,10 +29,10 @@ signal player_exited
 ## Смещение подсказки относительно позиции
 @export var hint_offset: Vector2 = Vector2(0, -40)
 
-## Длительность появления
+## Длительность появления в секундах
 @export var show_duration: float = 0.25
 
-## Длительность скрытия
+## Длительность скрытия в секундах
 @export var hide_duration: float = 0.15
 
 ## Тип анимации появления
@@ -33,7 +42,7 @@ signal player_exited
 @export var dimension_specific: bool = false
 
 ## Измерение для показа
-@export var show_in_dimension: BaseLevel.Dimension = BaseLevel.Dimension.DIM1
+@export var show_in_dimension: int = 0
 
 ## Метка текста
 @onready var _label: Label = $Hint/Label as Label
@@ -45,17 +54,11 @@ var text: String = ""
 var player_in_zone: bool = false
 
 ## Текущий твин
-var tween: Tween
+var tween: Tween = null
 
 ## Ссылка на уровень
-var _level: BaseLevel
+var _level: BaseLevel = null
 
-func set_text(hint_text: String) -> void:
-	text = hint_text
-	if _label:
-		_label.text = text
-		if label_settings:
-			_label.label_settings = label_settings
 
 func _ready() -> void:
 	if exp_text:
@@ -72,6 +75,10 @@ func _ready() -> void:
 		hint.position = hint_offset
 
 	_level = _find_level()
+	GameManager.debug(self.LOG_PREFIX+"Подсказка {} загружена\n", 
+		[str(uid) if uid else "без uid"]
+	)
+
 
 func _process(_delta: float) -> void:
 	if dimension_specific and _level:
@@ -82,18 +89,40 @@ func _process(_delta: float) -> void:
 			else:
 				_animate_hide()
 
+
+## Устанавливает текст подсказки.
+## [param hint_text] — текст для отображения
+func set_text(hint_text: String) -> void:
+	text = hint_text
+	if _label:
+		_label.text = text
+		if label_settings:
+			_label.label_settings = label_settings
+	GameManager.debug(self.LOG_PREFIX+"Подсказке {} установлен новый текст: {}\n", 
+		[str(uid) if uid else "без uid",
+		text]
+	)
+
+
+## Вызывается при входе тела в зону.
+## [param body] — вошедший узел
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player or body.is_in_group("Player"):
 		player_in_zone = true
 		_animate_show()
 		player_entered.emit()
 
+
+## Вызывается при выходе тела из зоны.
+## [param body] — вышедший узел
 func _on_body_exited(body: Node2D) -> void:
 	if body is Player or body.is_in_group("Player"):
 		player_in_zone = false
 		_animate_hide()
 		player_exited.emit()
 
+
+## Показывает подсказку с анимацией.
 func _animate_show() -> void:
 	if not hint:
 		return
@@ -102,11 +131,14 @@ func _animate_show() -> void:
 		if _level.current_dimension != show_in_dimension:
 			return
 	
-	if tween: 
+	if tween:
 		tween.kill()
 	
 	tween = create_tween()
 	hint.show()
+	GameManager.debug(self.LOG_PREFIX+"Подсказка {} появилась с анимацией {}\n", 
+		[str(uid) if uid else "без uid", animation_type]
+	)
 	
 	match animation_type:
 		"scale":
@@ -114,7 +146,7 @@ func _animate_show() -> void:
 			tween.tween_property(hint, "modulate:a", 1.0, show_duration)
 			tween.tween_property(hint, "scale", Vector2.ONE, show_duration)
 		"slide_up":
-			var target_pos := hint_offset
+			var target_pos: Vector2 = hint_offset
 			hint.position = hint_offset + Vector2(0, 20)
 			tween.set_parallel().set_ease(Tween.EASE_OUT)
 			tween.tween_property(hint, "modulate:a", 1.0, show_duration)
@@ -122,6 +154,8 @@ func _animate_show() -> void:
 		"fade":
 			tween.tween_property(hint, "modulate:a", 1.0, show_duration)
 
+
+## Скрывает подсказку с анимацией.
 func _animate_hide() -> void:
 	if not hint:
 		return
@@ -137,8 +171,11 @@ func _animate_hide() -> void:
 	await tween.finished
 	hint.hide()
 
+
+## Находит родительский уровень.
+## Возвращает найденный уровень или null.
 func _find_level() -> BaseLevel:
-	var node := get_parent()
+	var node: Node = get_parent()
 	while node:
 		if node is BaseLevel:
 			return node

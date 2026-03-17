@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c7m3n8o1w8spk"]
 
-[ext_resource type="Script" uid="uid://dy8dum4fa2ebu" path="res://scripts/objects/spike.gd" id="1_spike"]
+[ext_resource type="Script" uid="uid://bvolui712k8m8" path="res://scripts/objects/spike.gd" id="1_spike"]
 [ext_resource type="Texture2D" uid="uid://btnvyvpy7ffca" path="res://resources/Spikes/Individual Spike.png" id="2_hop5j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hop5j"]
@@ -8,7 +8,7 @@ atlas = ExtResource("2_hop5j")
 region = Rect2(0, 0, 17, 9)
 
 [node name="Spike" type="StaticBody2D" unique_id=697216101]
-collision_layer = 4
+collision_layer = 32
 collision_mask = 8
 script = ExtResource("1_spike")
 

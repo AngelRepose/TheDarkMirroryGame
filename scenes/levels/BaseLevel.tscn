@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://r54ydasrgqk"]
 
-[ext_resource type="Script" uid="uid://bn54txenft35q" path="res://scripts/level/base_level.gd" id="1_xxmur"]
-[ext_resource type="Script" uid="uid://iat57rtqa64b" path="res://scripts/level/base_dimension.gd" id="2_0plv3"]
+[ext_resource type="Script" uid="uid://ds81ijogk23qo" path="res://scripts/level/base_level.gd" id="1_xxmur"]
+[ext_resource type="Script" uid="uid://nxnmr06ya0ay" path="res://scripts/level/base_dimension.gd" id="2_0plv3"]
 [ext_resource type="TileSet" uid="uid://bmtwtfkiilus" path="res://resources/level/TileSet.tres" id="2_uyfon"]
-[ext_resource type="Script" uid="uid://b1dvhfmqh2icw" path="res://scripts/level/spawnpoint.gd" id="3_erm5t"]
 [ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://scenes/player/Player.tscn" id="4_uyfon"]
 [ext_resource type="PackedScene" uid="uid://dv22vo8xukorv" path="res://scenes/ui/hud.tscn" id="5_blrrs"]
 [ext_resource type="PackedScene" uid="uid://wm0ovs0ldrps" path="res://scenes/ui/pauseMenu.tscn" id="7_blrrs"]
+[ext_resource type="PackedScene" uid="uid://knh4hje8ebif" path="res://scenes/ui/levelFinished.tscn" id="7_kkhbh"]
 
 [sub_resource type="TileSet" id="TileSet_uyfon"]
 
@@ -17,38 +17,42 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uyfon"]
 size = Vector2(4114, 7)
 
-[node name="BaseLevel" type="Node2D" unique_id=1608145668 node_paths=PackedStringArray("player", "dimension_1", "dimension_2", "swap_effect")]
+[node name="BaseLevel" type="Node2D" unique_id=1608145668 node_paths=PackedStringArray("dimension_1", "dimension_2", "swap_effect", "player", "finish_menu")]
 script = ExtResource("1_xxmur")
-player = NodePath("Player")
+level_uid = &"level_0"
 dimension_1 = NodePath("NormalDimension")
 dimension_2 = NodePath("AlternativeDimension")
+restart_on_player_died = null
+restart_fade_out_time = null
+restart_fade_in_time = null
+restart_fade_color = null
 swap_effect = NodePath("CanvasLayer/SwapEffect")
-metadata/_custom_type_script = "uid://bn54txenft35q"
+swap_duration = null
+swap_color = null
+swap_fade_to_transparent = null
+swap_delay = null
+player = NodePath("Player")
+finish_menu = NodePath("FinishMenu")
 
 [node name="NormalBackground" type="TileMapLayer" parent="." unique_id=338303664]
 tile_set = ExtResource("2_uyfon")
 
 [node name="AlternativeBackground" type="TileMapLayer" parent="." unique_id=1135396797]
 tile_set = SubResource("TileSet_uyfon")
+navigation_enabled = false
 
 [node name="NormalDimension" type="TileMapLayer" parent="." unique_id=2112375942 node_paths=PackedStringArray("background")]
 tile_set = SubResource("TileSet_blrrs")
 script = ExtResource("2_0plv3")
-uid = &"dim0"
 background = NodePath("../NormalBackground")
-metadata/_custom_type_script = "uid://iat57rtqa64b"
 
 [node name="AlternativeDimension" type="TileMapLayer" parent="." unique_id=677575675 node_paths=PackedStringArray("background")]
 tile_set = SubResource("TileSet_kkhbh")
+navigation_enabled = false
 script = ExtResource("2_0plv3")
-uid = &"dim1"
 background = NodePath("../AlternativeBackground")
-default_enabled = false
-metadata/_custom_type_script = "uid://iat57rtqa64b"
 
-[node name="SpawnPoint" type="Node2D" parent="." unique_id=2062179808]
-script = ExtResource("3_erm5t")
-metadata/_custom_type_script = "uid://b1dvhfmqh2icw"
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=489195155]
 
 [node name="Player" parent="." unique_id=697792572 instance=ExtResource("4_uyfon")]
 
@@ -74,6 +78,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PauseMenu" parent="." unique_id=1499051207 instance=ExtResource("7_blrrs")]
+visible = false
+
+[node name="FinishMenu" parent="." unique_id=392967959 instance=ExtResource("7_kkhbh")]
 visible = false
 
 [connection signal="body_entered" from="DeathZone" to="." method="_on_death_zone_entered"]

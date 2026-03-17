@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://df8wtvk82p12o"]
 
-[ext_resource type="Script" uid="uid://nr37wn6fuo3r" path="res://scripts/objects/plate.gd" id="1_vlv0k"]
+[ext_resource type="Script" uid="uid://h44sta8d66sj" path="res://scripts/objects/plate.gd" id="1_vlv0k"]
 [ext_resource type="SpriteFrames" uid="uid://d2xos8du150ds" path="res://resources/Objects/plate.tres" id="2_vlv0k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]

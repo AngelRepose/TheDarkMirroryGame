@@ -1,43 +1,86 @@
 extends Control
 
-@export_category("list of levels")
-## индекс - номер уровня, сцена - уровень
-@export var loaded_scenes : Array[PackedScene] = []
-@export var levels_list_panel : PanelContainer
-@export var levels_vbox_container : VBoxContainer
-@export var button_reference : Button
-@export var level_list_x_size : int = 3
+## Меню выбора уровня с динамической загрузкой уровней.
 
-func _ready():
+class_name ChoiceLevels
+
+## Префикс для логирования
+const LOG_PREFIX: StringName = &"[ChoiceLevels] "
+
+## Шаблон кнопки для создания элементов уровня
+@export var button_reference: Button = null
+
+## Цвет разблокированного уровня
+@export var unlocked_color: Color = Color(0.3, 0.7, 0.3)
+
+## Цвет заблокированного уровня
+@export var locked_color: Color = Color(0.5, 0.5, 0.5)
+
+## Цвет пройденного уровня
+@export var completed_color: Color = Color(0.2, 0.5, 0.8)
+
+## Сетка-контейнер для размещения кнопок уровней
+@export var grid_container: GridContainer
+
+
+func _ready() -> void:
 	create_level_list()
 
-func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/menu.tscn")
 
-func create_level_list():
-	var now_list_x_size = level_list_x_size
-	var last_horisontal_box : HBoxContainer
-	var last_create_button : Button
-	# для каждой сцены из списка уровней создаем кнопку, размещаем, настраиваем её и привязываем переключение на уровень
-	for level_idx in range(loaded_scenes.size()):
-		if now_list_x_size == level_list_x_size:
-			last_horisontal_box = HBoxContainer.new()
-			levels_vbox_container.add_child(last_horisontal_box)
-			now_list_x_size = 0
-		last_create_button = Button.new()
-		# загружаем кпонке тему и размер
-		last_create_button.theme = button_reference.theme
-		last_create_button.custom_minimum_size = button_reference.custom_minimum_size
-		# устанавливаем кнопке текст
-		last_create_button.text = str(level_idx+1)
-		# покдлючаем к кнопке функцию переключения с замороженным вставленным значением ввиде ссылки на сцену
-		last_create_button.button_down.connect(open_level.bind(loaded_scenes[level_idx]))
-		last_horisontal_box.add_child(last_create_button)
-		now_list_x_size += 1
-	if loaded_scenes.size() == 0:
-		var label_of_notfoundlevels : Label = Label.new()
-		label_of_notfoundlevels.text = "levels is not found or don't set in level list"
-		levels_list_panel.add_child(label_of_notfoundlevels)
- 
-func open_level(level : PackedScene) -> void:
-	get_tree().change_scene_to_packed(level)
+## Возвращает пользователя в главное меню.
+func _on_back_pressed() -> void:
+	GameManager.to_main_menu()
+
+
+## Создаёт список кнопок уровней на основе данных из GameManager.
+func create_level_list() -> void:
+	GameManager.debug(self.LOG_PREFIX\
+	+ "Создание списка уровней\n", 
+	[]
+	)
+	
+	var last_create_button: Button = null
+	
+	for level_idx: int in range(1, GameManager.levels.size() + 1):
+		var level_scene: PackedScene = GameManager.get_level_by_index(level_idx)
+		var level_uid: StringName = level_scene.instantiate().level_uid
+		var is_unlocked: bool = SaveManager.is_level_unlocked(level_uid)
+		var is_completed: bool = SaveManager.is_level_completed(level_uid)
+		
+		GameManager.debug(self.LOG_PREFIX\
+		+ "Создание уровня {}. Пройден: {}. Разблокирован: {}\n", 
+		[level_uid, is_completed, is_unlocked]
+		)
+		
+		last_create_button = button_reference.duplicate() as Button
+		
+		if is_completed:
+			last_create_button.modulate = completed_color
+			if last_create_button.has_node("Lock"):
+				last_create_button.get_node("Lock").hide()
+		elif is_unlocked:
+			last_create_button.modulate = unlocked_color
+			last_create_button.disabled = false
+			if last_create_button.has_node("Lock"):
+				last_create_button.get_node("Lock").hide()
+		else:
+			last_create_button.modulate = locked_color
+			last_create_button.disabled = true
+			if last_create_button.has_node("Lock"):
+				last_create_button.get_node("Lock").show()
+		
+		last_create_button.text = str(level_idx)
+		
+		if is_unlocked:
+			last_create_button.button_down.connect(GameManager.open_level.bind(level_uid))
+		
+		grid_container.add_child(last_create_button)
+	
+	if GameManager.levels.is_empty():
+		GameManager.debug(self.LOG_PREFIX\
+		+ "Уровни не найдены или не настроены\n", 
+		[]
+		)
+		var label: Label = Label.new()
+		label.text = "Уровни не найдены или не настроены"
+		grid_container.add_child(label)

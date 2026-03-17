@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://wm0ovs0ldrps"]
 
-[ext_resource type="Script" uid="uid://bacwaf36y3hcx" path="res://scripts/ui/ingame_menu.gd" id="1_unqsy"]
+[ext_resource type="Script" uid="uid://bytp1cxh57p28" path="res://scripts/ui/pause_menu.gd" id="1_52teh"]
 [ext_resource type="Theme" uid="uid://bart274soe5d1" path="res://resources/ui/themes/main_menu.tres" id="2_52teh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aw6v6"]
@@ -12,7 +12,7 @@ corner_radius_bottom_left = 16
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=1499051207]
 process_mode = 2
-script = ExtResource("1_unqsy")
+script = ExtResource("1_52teh")
 
 [node name="Panel" type="Panel" parent="." unique_id=14198953]
 anchors_preset = 15
